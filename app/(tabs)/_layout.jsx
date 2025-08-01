@@ -10,13 +10,13 @@ export default function TabsLayout() {
 
   useEffect(() => {
     if (isAuth === null) return; // Still loading
-
     const inAuthGroup = segments[0] === "(tabs)";
-
     if (!isAuth && inAuthGroup) {
       router.replace("/login");
     }
+    
   }, [isAuth, segments]);
+    
 
   if (isAuth === null) {
     return null; // Or a loading spinner
