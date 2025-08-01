@@ -19,10 +19,11 @@ import {
   View,
 } from "react-native";
 import { BASE_URL } from "./constants/config";
-
+import { useAuth } from "./context/AuthContext";
 
 export default function Login() {
   const router = useRouter();
+  const { signIn } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,14 +37,9 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await axios.post(`${BASE_URL}login`, { email, password });
-      const token = res.data.token;
-      const user = res.data.user;
-
-      await AsyncStorage.setItem("token", token);
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-
+      await signIn(res.data.token, res.data.user);
       Alert.alert("✅ Login successful");
-      router.push("/home");
+      router.replace("/(tabs)");
     } catch (err) {
       const message =
         err.response?.data?.message ||
@@ -66,14 +62,14 @@ export default function Login() {
           contentContainerStyle={styles.scrollView}
           keyboardShouldPersistTaps="handled"
         >
-          <View className="bg-white rounded-3xl p-6 shadow-lg m-7  first-line:">
+          <View className="bg-white rounded-3xl p-6 shadow-lg m-7">
             {/* Logo */}
             <View className="items-center mb-6">
               <Text className="text-3xl font-extrabold text-violet-700">
                 ContentFuel
               </Text>
               <Text className="text-base text-gray-600 mt-1">
-                Login in 
+                Login to your account
               </Text>
             </View>
 
@@ -81,20 +77,23 @@ export default function Login() {
             <View className="space-y-5">
               <TextInput
                 className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 shadow-sm text-black mb-3"
-                placeholder="login/e-mail"
+                placeholder="Email address"
                 placeholderTextColor="#aaa"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
+                autoCorrect={false}
               />
               <TextInput
                 className="bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 shadow-sm text-black"
-                placeholder="password"
+                placeholder="Password"
                 placeholderTextColor="#aaa"
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
+                autoCapitalize="none"
+                autoCorrect={false}
               />
             </View>
 
@@ -122,9 +121,9 @@ export default function Login() {
               </Pressable>
             </View>
 
-            {/* Forgot Password */}
+            {/* Sign Up Link */}
             <Text className="text-center mt-3">
-              Don't have account ? {""}
+              Don't have an account?{" "}
               <Text
                 onPress={() => router.replace("/register")}
                 className="text-blue-500 font-medium"
@@ -156,7 +155,7 @@ export default function Login() {
             </View>
           </View>
           <Text className="text-center text-sm text-gray-400 mt-10">
-            © 2025 ContentFule Inc.
+            © 2025 ContentFuel Inc.
           </Text>
         </ScrollView>
       </TouchableWithoutFeedback>
