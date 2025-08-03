@@ -1,38 +1,110 @@
-// app/(tabs)/_layout.jsx
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { Tabs, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-export default function TabsLayout() {
-  const { isAuth } = useAuth();
-  const segments = useSegments();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (isAuth === null) return; // Still loading
-    const inAuthGroup = segments[0] === "(tabs)";
-    if (!isAuth && inAuthGroup) {
-      router.replace("/login");
-    }
-    
-  }, [isAuth, segments]);
-    
-
-  if (isAuth === null) {
-    return null; // Or a loading spinner
-  }
-
-  if (!isAuth) {
-    return null; // Will be redirected by the useEffect
-  }
+export default function DashboardLayout() {
 
   return (
-    <Tabs>
-      <Tabs.Screen name="index" options={{ title: "Home" }} />
-      <Tabs.Screen name="fashion" options={{ title: "Fashion" }} />
-      <Tabs.Screen name="chat" options={{ title: "Chat" }} />
-      <Tabs.Screen name="fitness" options={{ title: "Fitness" }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false, // This hides all titles
+        tabBarActiveTintColor: "#6e3b6e",
+        tabBarInactiveTintColor: "#888",
+        tabBarStyle: {
+          backgroundColor: "white",
+          borderTopWidth: 0,
+          elevation: 10,
+          height: 80,
+          paddingBottom: 10,
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={styles.tabIconContainer}>
+              <Ionicons name="airplane" size={size} color={color} />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="fashion"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={styles.tabIconContainer}>
+              <Ionicons name="shirt" size={size} color={color} />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={styles.tabIconContainer}>
+              <Ionicons name="chatbubble" size={size} color={color} />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="fitness"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={styles.tabIconContainer}>
+              <MaterialCommunityIcons
+                name="dumbbell"
+                size={size}
+                color={color}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={styles.tabIconContainer}>
+              <Ionicons name="person" size={size} color={color} />
+            </View>
+          ),
+        }}
+      />
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabIconContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    top: 10,
+  },
+  centerTab: {
+    top: -20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mainActionButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#6e3b6e",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+});

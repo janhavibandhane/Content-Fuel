@@ -1,78 +1,60 @@
+import axios from "axios";
 import { useRef, useState } from "react";
-
 import {
   FlatList,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  TouchableWithoutFeedback,
+  View
 } from "react-native";
+import { BASE_URL } from "../constants/config";
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
-
   const [input, setInput] = useState("");
-
-  const flatListRef = useRef(null); // Ref to control scrolling
+  const flatListRef = useRef(null);
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage = {
       id: Date.now().toString(),
-
       text: input,
-
       sender: "user",
     };
 
     setMessages((prev) => [...prev, userMessage]);
-
     setInput("");
-
-    // Auto-scroll to the bottom after sending a message
-
-    flatListRef.current.scrollToEnd({ animated: true });
+    flatListRef.current?.scrollToEnd({ animated: true });
 
     try {
-      const response = await fetch("https://your-api-url.com/chat", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({ message: input }),
+      const response = await axios.post(`${BASE_URL}send`, {
+        message: input,
       });
 
-      const data = await response.json();
+      const data = response.data;
 
       const botMessage = {
         id: Date.now().toString() + "_bot",
-
         text: data.reply || "No response",
-
         sender: "bot",
       };
 
       setMessages((prev) => [...prev, botMessage]);
-
-      // Auto-scroll after receiving the bot's reply
-
-      flatListRef.current.scrollToEnd({ animated: true });
+      flatListRef.current?.scrollToEnd({ animated: true });
     } catch (error) {
-      console.error("Fetch error:", error);
-
+      console.error("Axios error:", error.message);
       setMessages((prev) => [
         ...prev,
-
         {
           id: Date.now().toString() + "_err",
-
           text: "Error getting response",
-
           sender: "bot",
         },
       ]);
@@ -80,47 +62,129 @@ export default function Chat() {
   };
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1 bg-gray-100 mt-10"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <FlatList
-        data={messages} //messages is the array of chat messages (user + bot).
-        keyExtractor={(item) => item.id} //React Native needs a unique key for each item.
-        ref={flatListRef} // Attach ref here
-        className="flex-1 p-4"
-        contentContainerStyle={{ paddingBottom: 80 }} // Adds padding for the keyboard
-        onContentSizeChange={() => {
-          flatListRef.current.scrollToEnd({ animated: true }); // Scroll to the end on content change
-        }}
-        renderItem={({ item }) => (
-          <View
-            className={`p-4 rounded-lg my-2 max-w-[80%] ${
-              item.sender === "user"
-                ? "bg-blue-400 self-end"
-                : "bg-gray-300 self-start"
-            }`}
-          >
-            <Text className="text-white text-base">{item.text}</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.innerContainer}>
+            {/* Chat messages area */}
+            <View style={styles.messagesContainer}>
+              <FlatList
+                data={messages}
+                keyExtractor={(item) => item.id}
+                ref={flatListRef}
+                contentContainerStyle={styles.flatListContent}
+                onContentSizeChange={() => {
+                  flatListRef.current?.scrollToEnd({ animated: true });
+                }}
+                renderItem={({ item }) => (
+                  <View
+                    style={[
+                      styles.messageBubble,
+                      item.sender === "user"
+                        ? styles.userMessage
+                        : styles.botMessage,
+                    ]}
+                  >
+                    <Text style={styles.messageText}>{item.text}</Text>
+                  </View>
+                )}
+              />
+            </View>
+
+            {/* Input area */}
+            <View style={styles.inputContainer}>
+              <TextInput
+                value={input}
+                onChangeText={setInput}
+                placeholder="Type a message..."
+                style={styles.textInput}
+                multiline
+              />
+              <TouchableOpacity
+                style={styles.sendButton}
+                onPress={handleSend}
+              >
+                <Text style={styles.sendButtonText}>Send</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        )}
-      />
-
-      <View className="flex-row items-center p-4 bg-white border-t border-gray-300">
-        <TextInput
-          value={input}
-          onChangeText={setInput}
-          placeholder="Type a message..."
-          className="flex-1 bg-gray-200 p-4 rounded-full text-lg"
-        />
-
-        <TouchableOpacity
-          className="bg-blue-500 p-4 rounded-full ml-2"
-          onPress={handleSend}
-        >
-          <Text className="text-white font-semibold">Send</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  container: {
+    flex: 1,
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  messagesContainer: {
+    marginTop:20,
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  flatListContent: {
+    paddingBottom: 16,
+  },
+  messageBubble: {
+    padding: 12,
+    borderRadius: 12,
+    marginVertical: 4,
+    maxWidth: '80%',
+  },
+  userMessage: {
+    backgroundColor: '#fff',
+    alignSelf: 'flex-end',
+    borderWidth: 1,
+    borderColor: '#e5e5e5',
+  },
+  botMessage: {
+    backgroundColor: '#e5e5e5',
+    alignSelf: 'flex-start',
+  },
+  messageText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e5e5e5',
+  },
+  textInput: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    maxHeight: 120,
+  },
+  sendButton: {
+    backgroundColor: '#6e3b6e',
+    borderRadius: 20,
+    padding: 12,
+    marginLeft: 8,
+  },
+  sendButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+});

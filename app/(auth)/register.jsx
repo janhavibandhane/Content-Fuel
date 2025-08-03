@@ -16,7 +16,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { BASE_URL } from "./constants/config";
+import { BASE_URL } from "../constants/config";
 
 export default function Register() {
   const router = useRouter();
@@ -62,21 +62,16 @@ export default function Register() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+      behavior={Platform.OS === "ios" ? "padding" : "height"} // ✅ fixed typo
+      style={{ flex: 1 }}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView
-          className="flex-1 bg-white"
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent: "center",
-            padding: 24,
-          }}
-          keyboardShouldPersistTaps="handled"
+          style={{ flex: 1 }}
+          contentContainerStyle={{ padding: 20,marginTop:90 }} // ✅ removed justifyContent: "center"
+          keyboardShouldPersistTaps="handled" // ✅ fixed prop name
         >
-          <View className="bg-white rounded-3xl p-6 shadow-lg m-1  first-line:">
+          <View className="bg-white rounded-3xl p-6 shadow-lg m-1">
             <View className="items-center mb-10">
               <Text className="text-4xl font-extrabold text-violet-700">
                 ContentFuel
@@ -85,7 +80,7 @@ export default function Register() {
                 Create your account
               </Text>
             </View>
-            {/* Input Fields */}
+
             <TextInput
               className="bg-white border border-gray-200 rounded-xl px-4 py-3 mb-4 text-black"
               placeholder="Name"
@@ -134,7 +129,6 @@ export default function Register() {
               onChangeText={setAge}
             />
 
-            {/* Register Button */}
             <View className="mt-6">
               <Pressable
                 onPress={handleRegister}
@@ -151,14 +145,13 @@ export default function Register() {
                     <ActivityIndicator color="#fff" />
                   ) : (
                     <Text className="text-white text-lg font-semibold">
-                      Regsiter
+                      Register
                     </Text>
                   )}
                 </LinearGradient>
               </Pressable>
             </View>
 
-            {/* Navigation */}
             <Text className="text-sm text-gray-600 text-center mt-6">
               Already have an account?{" "}
               <Text
@@ -171,7 +164,7 @@ export default function Register() {
           </View>
 
           <Text className="text-center text-sm text-gray-400 mt-10">
-            © 2025 ContentFule Inc.
+            © 2025 ContentFuel Inc.
           </Text>
         </ScrollView>
       </TouchableWithoutFeedback>

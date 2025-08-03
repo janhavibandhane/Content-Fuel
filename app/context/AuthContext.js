@@ -7,6 +7,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(null);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ Add this
 
   useEffect(() => {
     const loadAuthData = async () => {
@@ -18,6 +19,8 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         console.error('Error loading auth data:', error);
         setIsAuth(false);
+      } finally {
+        setLoading(false); // ✅ Important
       }
     };
 
@@ -47,7 +50,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuth, user, signIn, signOut }}>
+    <AuthContext.Provider value={{ isAuth, user, signIn, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   );

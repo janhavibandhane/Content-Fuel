@@ -18,8 +18,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { BASE_URL } from "./constants/config";
-import { useAuth } from "./context/AuthContext";
+import { BASE_URL } from "../constants/config";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const router = useRouter();

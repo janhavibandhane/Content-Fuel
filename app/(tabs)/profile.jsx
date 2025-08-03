@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, Pressable, Text, View } from "react-native";
+import { Alert, Pressable, Text, View, ActivityIndicator } from "react-native";
 import { useAuth } from '../context/AuthContext';
 
 export default function Profile() {
@@ -18,7 +18,7 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       await signOut();
-      router.replace("/login");
+      router.replace("/(auth)");
     } catch (error) {
       Alert.alert("❌ Logout failed", "Please try again");
     }
@@ -27,42 +27,68 @@ export default function Profile() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-white">
-        <Text className="text-gray-500">Loading profile...</Text>
+        <ActivityIndicator size="large" color="#6366f1" />
+        <Text className="text-gray-500 mt-4 text-lg">Loading profile...</Text>
       </View>
     );
   }
 
   return (
-    <View  className="flex-1 justify-center bg-white p-6">
-      <View className="items-center mt-8 mb-10">
-        <View className="w-32 h-32 rounded-full bg-purple-100 items-center justify-center mb-4">
-          
-            <Text className="text-4xl text-purple-700 font-bold">
+    <View className="flex-1 bg-white">
+      {/* Header */}
+      <LinearGradient
+        colors={["#6366f1", "#ec4899"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        className="h-72 w-full items-center justify-center rounded-b-3xl shadow-md"
+      >
+        <View className="w-28 h-28 rounded-full bg-white items-center justify-center shadow-md">
+          <View className="w-24 h-24 rounded-full bg-purple-100 items-center justify-center">
+            <Text className="text-4xl font-bold text-purple-700">
               {user?.name?.[0]?.toUpperCase() || "U"}
             </Text>
-         
+          </View>
         </View>
-        
-        <Text className="text-2xl font-bold text-gray-800 mb-1">
+        <Text className="text-white text-2xl font-bold mt-4">
           {user?.name || "User"}
         </Text>
-        <Text className="text-gray-500 mb-2">{user?.email || ""}</Text>
+      </LinearGradient>
+
+      {/* User Info */}
+      <View className="px-6 mt-8 ">
+        <View className="bg-gray-100 p-4 rounded-xl shadow-sm mb-5">
+          <Text className="text-gray-600 text-sm">📧 Email</Text>
+          <Text className="text-gray-800 text-lg font-medium">{user?.email}</Text>
+        </View>
+        {user?.content ? (
+          <View className="bg-gray-100 p-4 rounded-xl shadow-sm mb-5">
+            <Text className="text-gray-600 text-sm">📄 Bio</Text>
+            <Text className="text-gray-800 text-lg font-medium">{user.content}</Text>
+          </View>
+        ) : null}
+        {user?.instaId ? (
+          <View className="bg-gray-100 p-4 rounded-xl shadow-sm mb-5">
+            <Text className="text-gray-600 text-sm">📸 Instagram</Text>
+            <Text className="text-gray-800 text-lg font-medium">@{user.instaId}</Text>
+          </View>
+        ) : null}
       </View>
 
-     
-
-      <View className="mt-8 px-4">
+      {/* Logout Button */}
+      <View className="mt-10 px-6">
         <Pressable
           onPress={handleLogout}
-          className="w-full rounded-full overflow-hidden shadow-md"
+          className="w-full rounded-full overflow-hidden shadow-lg"
         >
           <LinearGradient
             colors={["#6366f1", "#ec4899"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            className="py-3 items-center rounded-full"
+            className="py-4 items-center rounded-full"
           >
-            <Text className="text-white text-lg font-semibold">Log Out</Text>
+            <Text className="text-white text-lg font-bold tracking-wide">
+              Log Out
+            </Text>
           </LinearGradient>
         </Pressable>
       </View>
