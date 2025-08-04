@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function DashboardLayout() {
-
   return (
     <Tabs
       screenOptions={{
@@ -20,13 +19,13 @@ export default function DashboardLayout() {
           backgroundColor: "white",
           borderTopWidth: 0,
           elevation: 10,
-          height: 80,
+          height: 90,
           paddingBottom: 10,
         },
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="travel"
         options={{
           tabBarIcon: ({ color, size }) => (
             <View style={styles.tabIconContainer}>
@@ -45,16 +44,7 @@ export default function DashboardLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="chat"
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <View style={styles.tabIconContainer}>
-              <Ionicons name="chatbubble" size={size} color={color} />
-            </View>
-          ),
-        }}
-      />
+
       <Tabs.Screen
         name="fitness"
         options={{
@@ -70,6 +60,16 @@ export default function DashboardLayout() {
         }}
       />
       <Tabs.Screen
+        name="chat"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <View style={styles.tabIconContainer}>
+              <Ionicons name="chatbubble" size={size} color={color} />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -77,6 +77,13 @@ export default function DashboardLayout() {
               <Ionicons name="person" size={size} color={color} />
             </View>
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: "none" }, // 👈 hides the space
         }}
       />
     </Tabs>

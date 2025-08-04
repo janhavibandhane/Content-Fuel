@@ -27,49 +27,17 @@ export default function Index() {
       </View>
 
       {/* Bottom buttons */}
-      <View className="px-6 pb-24">
-        <Pressable onPress={() => router.push("/login")} className="mb-4">
-          <LinearGradient
-            colors={["#6366f1", "#ec4899"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={{
-              paddingVertical: 14,
-              borderRadius: 9999,
-              alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 6,
-              elevation: 5,
-            }}
-          >
-            <Text className="text-white text-lg font-semibold tracking-wide">
-              Login
-            </Text>
-          </LinearGradient>
+      <View className="px-6 pb-24 ">
+        <Pressable onPress={() => router.push("/login")} className="mb-4 bg-[#6e3b6e] flex justify-center items-center  p-3 rounded-xl">
+          <Text className="text-white text-lg font-semibold tracking-wide">
+            Login
+          </Text>
         </Pressable>
 
-        <Pressable onPress={() => router.push("/register")}>
-          <LinearGradient
-            colors={["#ec4899", "#6366f1"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={{
-              paddingVertical: 14,
-              borderRadius: 9999,
-              alignItems: "center",
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 6,
-              elevation: 5,
-            }}
-          >
-            <Text className="text-white text-lg font-semibold tracking-wide">
-              Register
-            </Text>
-          </LinearGradient>
+        <Pressable className="bg-[#6e3b6e] flex justify-center items-center p-3 rounded-xl" onPress={() => router.push("/register")}>
+          <Text className="text-white text-lg font-semibold tracking-wide">
+            Register
+          </Text>
         </Pressable>
       </View>
     </ImageBackground>

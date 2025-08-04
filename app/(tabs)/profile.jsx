@@ -37,19 +37,19 @@ export default function Profile() {
     <View className="flex-1 bg-white">
       {/* Header */}
       <LinearGradient
-        colors={["#6366f1", "#ec4899"]}
+        colors={["#f3e8ff", "#fdf4ff"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         className="h-72 w-full items-center justify-center rounded-b-3xl shadow-md"
       >
         <View className="w-28 h-28 rounded-full bg-white items-center justify-center shadow-md">
-          <View className="w-24 h-24 rounded-full bg-purple-100 items-center justify-center">
+          <View className="w-24 h-24 rounded-full bg-purple-300 items-center justify-center">
             <Text className="text-4xl font-bold text-purple-700">
               {user?.name?.[0]?.toUpperCase() || "U"}
             </Text>
           </View>
         </View>
-        <Text className="text-white text-2xl font-bold mt-4">
+        <Text className="text-purple-300 text-2xl font-bold mt-4">
           {user?.name || "User"}
         </Text>
       </LinearGradient>
@@ -78,18 +78,12 @@ export default function Profile() {
       <View className="mt-10 px-6">
         <Pressable
           onPress={handleLogout}
-          className="w-full rounded-full overflow-hidden shadow-lg"
+          className="w-full rounded-full overflow-hidden shadow-lg bg-purple-500 text-center p-4"
         >
-          <LinearGradient
-            colors={["#6366f1", "#ec4899"]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            className="py-4 items-center rounded-full"
-          >
-            <Text className="text-white text-lg font-bold tracking-wide">
+          
+            <Text className="text-white text-lg font-bold tracking-wide text-center">
               Log Out
             </Text>
-          </LinearGradient>
         </Pressable>
       </View>
     </View>

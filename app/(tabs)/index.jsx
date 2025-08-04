@@ -1,53 +1,94 @@
-import { FlatList, Text, View } from "react-native";
-import CardsForTabs from "../ReusableComponents/CardsForTabs";
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import Feather from 'react-native-vector-icons/Feather';
+import { Link } from "expo-router";
 
 
+const { width } = Dimensions.get("window");
 
-
-export default function index() {
- const travelData = [
-  {
-    id: '1',
-    text: '1. Hidden Gems: Explore 5 underrated destinations you’ve never heard of.',
-    img: 'https://image.jimcdn.com/app/cms/image/transf/dimension=2380x10000:format=jpg/path/sa6549607c78f5c11/image/i61e5eecc71d3eff4/version/1524308620/lauterbrunnen-valley-best-hidden-gems-in-europe-copyright-creative-travel-projects-european-best-destinations.jpg',
-  },
-  {
-    id: '2',
-    text: '2. Travel on a Budget: Tips for seeing the world without breaking the bank.',
-    img: 'https://upgradedpoints.com/wp-content/uploads/2022/04/Top-view-tourist-counting-cash-to-spend-during-his-luxury-vacation-planning-budget.jpeg',
-  },
-  {
-    id: '3',
-    text: '3. Solo Travel Diaries: Why exploring alone might be your best trip ever.',
-    img: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: '4',
-    text: '4. Weekend Getaways: Top 3 destinations under 3 hours from your city.',
-    img: 'https://s3.india.com/wp-content/uploads/2024/10/weekend-gateaway-in-hampi.jpg##image/jpg',
-  },
-  {
-    id: '5',
-    text: '5. Digital Nomad Life: Best cities to work remotely and explore.',
-    img: 'https://www.thetravelteam.com/wp-content/uploads/2022/09/ttt-work-remote-09-2022.webp',
-  },
+export default function Index() {
+const features = [
+  { icon: <Feather name="zap" size={28} color="#4f46e5" />, title: "Reel Ideas" },
+  { icon: <Feather name="edit-2" size={28} color="#4f46e5" />, title: "Captions" },
+  { icon: <Feather name="hash" size={28} color="#4f46e5" />, title: "Hashtags" },
+  { icon: <Feather name="music" size={28} color="#4f46e5" />, title: "Audio" },
 ];
 
+
   return (
-    <View className="bg-gray-100 p-5 mt-10">
-         {/* Title */}
-   
-         <Text className="text-3xl font-bold text-purple-700 text-center mb-6">
-           Top 5 Travel Trends
-         </Text>
-         <FlatList
-         data={travelData}
-         renderItem={({item})=><CardsForTabs img={item.img} text={item.text}></CardsForTabs>}
-         keyExtractor={(item) => item.id}
-         />
-       
-   
-    
-       </View>
+    <LinearGradient
+      colors={["#eef2ff", "#ffffff"]}
+      style={{ flex: 1 }}
+    >
+      <ScrollView contentContainerStyle={{ padding: 20 }}>
+        <View className="flex items-center mt-20 space-y-6">
+          {/* Title */}
+          <Text className="text-4xl font-extrabold text-purple-700 mb-3">
+            Content Fuel
+          </Text>
+
+          {/* Hero Image */}
+          <Image
+            source={{
+              uri: "https://i.pinimg.com/736x/6d/3f/e8/6d3fe8746c113a5628ae094c87b4f8dc.jpg",
+            }}
+            style={{
+              width: width - 40,
+              height: 200,
+              borderRadius: 16,
+            }}
+          />
+
+          {/* Headline */}
+          <Text className="text-2xl font-bold text-center text-gray-800 px-4 mt-8">
+            Supercharge Your Content Creation with AI Ideas
+          </Text>
+
+          {/* Subheadline */}
+          <Text className="text-base text-gray-600 text-center px-4 mt-4">
+            Instantly generate Reel ideas, captions, trending hashtags, and
+            audio based on your niche — all powered by AI.
+          </Text>
+
+          {/* Features Grid */}
+          <View className="w-full mt-10 flex-row flex-wrap justify-between gap-y-6">
+            {features.map((feature, index) => (
+              <View
+                key={index}
+                className="w-[48%] bg-white p-4 rounded-2xl shadow-md items-center"
+              >
+                {feature.icon}
+                <Text className="mt-2 text-sm font-medium text-gray-800 text-center">
+                  {feature.title}
+                </Text>
+              </View>
+            ))}
+          </View>
+
+          {/* CTA Button */}
+          <TouchableOpacity className="bg-purple-700 px-6 py-3 rounded-full mt-10">
+            <Link href={'/chat'}><Text className="text-white text-lg font-semibold">Get Started</Text></Link>
+          </TouchableOpacity>
+
+          {/* Testimonial */}
+          <Text className="italic text-center text-gray-500 mt-8 px-4">
+            “The best tool I’ve used for content planning!”
+          </Text>
+
+          {/* Footer */}
+          <Text className="text-xs text-gray-400 text-center mt-12 mb-8">
+            v1.0 • Made with 💜 by Team
+          </Text>
+        </View>
+      </ScrollView>
+    </LinearGradient>
   );
 }
